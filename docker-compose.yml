@@ -1,0 +1,16 @@
+version: "3.7"
+
+services:
+  ts-node-crud-with-docker:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: base
+    volumes:
+      - ./src:/home/pitang/Desktop/prog/estudos/dockerize-node-crud/src
+    container_name: ts-node-crud-with-docker
+    expose:
+      - "3333"
+    ports:
+      - "3333:3333"
+    command: yarn dev

@@ -4,7 +4,7 @@ WORKDIR /home/pitang/Desktop/prog/estudos/dockerize-node-crud
 
 COPY package*.json ./
 
-RUN yarn
+RUN yarn install
 
 COPY . .
 

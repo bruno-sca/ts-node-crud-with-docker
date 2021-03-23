@@ -1,12 +1,15 @@
 import { Request, Response } from "express";
 import { getCustomRepository } from "typeorm";
+import jwt from "jsonwebtoken";
+import bcrypt from "bcrypt";
 import * as yup from "yup";
 
 import { UsersRepository } from "../repositories/UsersRepository";
 
+const saltRounds = 10;
 class UsersController {
   async create(request: Request, response: Response) {
-    const { name, email, password } = request.body;
+    let { name, email, password } = request.body;
 
     const schema = yup.object().shape({
       name: yup.string().required("Campo nome é obrigatório"),
@@ -35,6 +38,9 @@ class UsersController {
       });
     }
 
+    const salt = bcrypt.genSaltSync(saltRounds);
+    password = bcrypt.hashSync(password, salt);
+
     const user = usersRepository.create({
       name,
       email,
@@ -42,8 +48,6 @@ class UsersController {
     });
 
     await usersRepository.save(user);
-
-    delete user.password;
 
     return response.status(201).json(user);
   }
@@ -60,7 +64,7 @@ class UsersController {
     return response.json(all);
   }
 
-  async signIn(request: Request, response: Response) {
+  async auth(request: Request, response: Response) {
     const { email, password } = request.body;
 
     const schema = yup.object().shape({
@@ -98,11 +102,6 @@ class UsersController {
     delete userExists.password;
 
     return response.status(201).json(userExists);
-
-    // const requestUser = usersRepository.create({
-    //   email,
-    //   password,
-    // });
   }
 }
 

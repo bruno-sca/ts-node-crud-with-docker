@@ -8,12 +8,14 @@
     "typeorm": "ts-node-dev node_modules/typeorm/cli.js"
   },
   "dependencies": {
+    "@types/bcrypt": "^3.0.0",
+    "bcrypt": "^5.0.1",
+    "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "jsonwebtoken": "^8.5.1",
     "reflect-metadata": "^0.1.13",
     "sqlite3": "^5.0.2",
     "typeorm": "^0.2.31",
-    "typeorm-encrypted": "^0.5.6",
     "uuid": "^8.3.2",
     "yup": "^0.32.9"
   },

@@ -8,6 +8,6 @@ const usersController = new UsersController();
 router.get("/users", usersController.show);
 router.post("/users", usersController.create);
 
-router.post("/users/signIn", usersController.signIn);
+router.post("/users/signIn", usersController.auth);
 
 export { router };

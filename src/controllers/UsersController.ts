@@ -38,8 +38,8 @@ class UsersController {
       });
     }
 
-    const salt = bcrypt.genSaltSync(saltRounds);
-    password = bcrypt.hashSync(password, salt);
+    const salt = await bcrypt.genSalt(saltRounds);
+    password = await bcrypt.hash(String(password), salt);
 
     const user = usersRepository.create({
       name,
@@ -49,10 +49,12 @@ class UsersController {
 
     await usersRepository.save(user);
 
+    delete user.password;
+
     return response.status(201).json(user);
   }
 
-  async show(request: Request, response: Response) {
+  async index(request: Request, response: Response) {
     const usersRepository = getCustomRepository(UsersRepository);
 
     const all = await usersRepository.find();
@@ -83,25 +85,27 @@ class UsersController {
 
     const usersRepository = getCustomRepository(UsersRepository);
 
-    const userExists = await usersRepository.findOne({
+    const user = await usersRepository.findOne({
       email,
     });
 
-    if (!userExists) {
+    if (!user) {
       return response.status(401).json({
         error: "Usuário não encontrado!",
       });
     }
 
-    if (userExists.password !== password) {
+    if (await bcrypt.compare(password, user.password)) {
       return response.status(401).json({
         error: "Senha incorreta!",
       });
     }
 
-    delete userExists.password;
+    delete user.password;
 
-    return response.status(201).json(userExists);
+    const token = jwt.sign({ ...user }, process.env.JWT_SECRET_KEY);
+
+    return response.status(201).json({ token, ...user });
   }
 }
 

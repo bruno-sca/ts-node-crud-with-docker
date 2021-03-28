@@ -11,6 +11,7 @@ router.get("/users", usersController.index);
 router.post("/users", usersController.create);
 router.post("/users/signIn", usersController.auth);
 
+router.get("/todo", toDosController.index);
 router.post("/todo", toDosController.create);
 
 export { router };

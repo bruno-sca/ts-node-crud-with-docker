@@ -63,7 +63,7 @@ class UsersController {
       delete user.password;
     });
 
-    return response.json(all);
+    return response.status(200).json(all);
   }
 
   async auth(request: Request, response: Response) {
@@ -105,7 +105,7 @@ class UsersController {
 
     const token = jwt.sign({ ...user }, process.env.JWT_SECRET_KEY);
 
-    return response.status(201).json({ token, ...user });
+    return response.status(200).json({ token, ...user });
   }
 }
 

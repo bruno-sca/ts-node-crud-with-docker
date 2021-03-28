@@ -26,9 +26,24 @@ class ToDosController {
       user_id: user.id,
       title,
       description,
+      is_done: false,
     });
 
+    await toDosRepository.save(toDo);
+
     return response.status(201).json(toDo);
+  }
+
+  async index(request: Request, response: Response) {
+    const toDosRepository = getCustomRepository(ToDosRepository);
+
+    const user = response.locals.loggedUser;
+
+    const userToDos = await toDosRepository.find({
+      user_id: user.id,
+    });
+
+    return response.status(200).json({ toDos: userToDos });
   }
 }
 

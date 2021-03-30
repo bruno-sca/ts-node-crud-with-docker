@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from "express";
 
 const jwt = require("jsonwebtoken");
 
-const publicRoutes = ["/user"];
+const publicRoutes = ["/users", "/users/signIn"];
 
 const authMiddleware = (req: Request, res: Response, next: NextFunction) => {
   const { authentication } = req.headers;

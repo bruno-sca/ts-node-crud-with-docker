@@ -34,6 +34,29 @@ class ToDosController {
     return response.status(201).json(toDo);
   }
 
+  async update(request: Request, response: Response) {
+    const { id } = request.body;
+
+    const schema = yup.object().shape({
+      id: yup.string().required("Campo ID é obrigatório"),
+    });
+
+    try {
+      await schema.validate(request.body, { abortEarly: false });
+    } catch (error) {
+      return response.status(400).json({ error });
+    }
+
+    const toDosRepository = getCustomRepository(ToDosRepository);
+
+    const toDo = await toDosRepository.save({
+      ...request.body,
+      id,
+    });
+
+    return response.status(200).json(toDo);
+  }
+
   async index(request: Request, response: Response) {
     const toDosRepository = getCustomRepository(ToDosRepository);
 
